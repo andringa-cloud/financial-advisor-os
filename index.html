@@ -117,7 +117,7 @@ table{border-collapse:collapse;font-size:12px;}
 .col-count{font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px;background:#f1f5f9;color:#64748b;}
 .col-count.warn{background:#fee2e2;color:#991b1b;}
 .col-desc{font-size:11px;color:#64748b;}
-.dom-row td{background:#1a1f2e;color:#64748b;padding:6px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;border:1px solid rgba(255,255,255,0.05);}
+.dom-row td{background:#1a1f2e;color:#94a3b8;padding:6px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;border:1px solid rgba(255,255,255,0.05);border-left-width:4px;}
 .bh-td{padding:10px 12px;border:1px solid #e2e8f0;background:white;font-size:12px;font-weight:500;color:#1e293b;white-space:nowrap;vertical-align:top;}
 .cx-cell{padding:6px 7px;border:1px solid #e2e8f0;vertical-align:top;min-height:72px;}
 .cx-s{background:#f8fafc;border-top:2px solid #94a3b8;}
@@ -377,19 +377,30 @@ var DOMAINS=[
     {bh:'Jeugd & Gezin',cells:{f:'jeugd'}},
     {bh:'Wmo & Zorg',cells:{g:'welzijn'}},
     {bh:'Participatiewet',cells:{}},
-    {bh:'Onderwijs',cells:{}}
+    {bh:'Onderwijs',cells:{}},
+    {bh:'SRCE — Efred Bos',cells:{},icon:'🎭',sub:'Sport, Recreatie, Cultuur & Educatie\nRianne de Vries · Marko van der Schoot · Casper Christiaanse · Gea Veltman'}
   ]},
   {name:'Bedrijfsvoering',rows:[
     {bh:'HRM & Organisatie',cells:{w:'formatie'}},
     {bh:'I&A / Informatisering',cells:{a:'ia'}},
     {bh:'Financiën & Control',cells:{a:'vjn'}},
-    {bh:'Facilitair & Inkoop',cells:{}}
+    {bh:'Facilitair & Inkoop — Joost Hop',cells:{},icon:'🏢',sub:'Teammanager Facilitair en Inkoop'},
+    {bh:'Communicatie — Nanda Kapper',cells:{},icon:'📢',sub:'Beleidsadviseur Communicatie'},
+    {bh:'Ondernemingsraad — Nathalie Schreuder',cells:{},icon:'🤝',sub:'Ambtelijk secretaris OR'}
   ]},
   {name:'Ruimtelijke Ordening',rows:[
     {bh:'Infrastructuur',cells:{}},
     {bh:'Groen & Spelen',cells:{}},
     {bh:'Vastgoed',cells:{b:'vastgoed'}},
     {bh:'Grote Projecten',cells:{s:'parkeren'}}
+  ]},
+  {name:'Dienstverlening & Regie',rows:[
+    {bh:'Dienstverlening — Carolien Nicolai',cells:{},icon:'🌐',sub:'Opgaveregisseur · UX, participatie, inclusiviteit, Meerinzicht-regie'},
+    {bh:'Publiekscentrum — Ingeborg Peterson',cells:{},icon:'🏛️',sub:'Teamleider · Burgerzaken, belastingen, leerlingenvervoer, meldingen'},
+    {bh:'Windparken & Bodemdaling — Jan Nieuwenhuis',cells:{},icon:'💨',sub:'Opgaveregisseur · Windparken, bodemdaling'}
+  ]},
+  {name:'Duurzaamheid & Ruimte',rows:[
+    {bh:'Duurzaamheid — Paul van Liempt',cells:{},icon:'🌱',sub:'Beleidsadviseur · Energietransitie, biodiversiteit, klimaatadaptatie, netcongestie'}
   ]}
 ];
 var COLS=['s','a','f','w','b','g'];
@@ -419,13 +430,30 @@ var CARDS={
 };
 function renderMatrix(){
   var tbody=document.getElementById('matrix-body');if(!tbody)return;
+  /* domein-kleur voor linkerbalk */
+  var domColors=['#6366f1','#f59e0b','#10b981','#06b6d4','#84cc16'];
   var html='';
   for(var d=0;d<DOMAINS.length;d++){
     var dom=DOMAINS[d];
-    html+='<tr class="dom-row"><td colspan="7">'+dom.name+'</td></tr>';
+    var dc=domColors[d]||'#94a3b8';
+    html+='<tr class="dom-row"><td colspan="7" style="border-left:4px solid '+dc+';">'+dom.name+'</td></tr>';
     for(var r=0;r<dom.rows.length;r++){
       var row=dom.rows[r];
-      html+='<tr><td class="bh-td">'+row.bh+'</td>';
+      /* bh-td: met of zonder icoon/subregel */
+      var bhHtml='';
+      if(row.icon){
+        var subLines=(row.sub||'').split('\n');
+        bhHtml='<td class="bh-td" style="border-left:3px solid '+dc+';min-width:160px;">'
+          +'<div style="display:flex;align-items:flex-start;gap:7px;">'
+          +'<span style="font-size:18px;flex-shrink:0;margin-top:1px;">'+row.icon+'</span>'
+          +'<div><div style="font-weight:600;font-size:12px;color:#1e293b;">'+row.bh+'</div>'
+          +'<div style="font-size:10px;color:#64748b;margin-top:2px;line-height:1.4;">'+subLines[0]+'</div>'
+          +(subLines[1]?'<div style="font-size:9px;color:#94a3b8;margin-top:2px;font-style:italic;">'+subLines[1]+'</div>':'')
+          +'</div></div></td>';
+      } else {
+        bhHtml='<td class="bh-td" style="border-left:3px solid '+dc+';">'+row.bh+'</td>';
+      }
+      html+='<tr>'+bhHtml;
       for(var ci=0;ci<COLS.length;ci++){
         var ck=COLS[ci],cardId=row.cells[ck]||null,mk=row.bh+'|'+ck,extras=extraCards[mk]||[];
         html+='<td class="cx-cell cx-'+ck+'">';
