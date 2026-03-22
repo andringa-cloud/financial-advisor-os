@@ -199,6 +199,28 @@ table{border-collapse:collapse;font-size:12px;}
 .erg-col{background:#f8fafc;border-radius:9px;padding:14px;}
 .erg-lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
 .erg-txt{font-size:12px;color:#1e293b;line-height:1.5;}
+/* P&C MONITOR */
+.pc-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;position:relative;}
+.pc-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:14px;border:2px solid white;box-shadow:0 0 0 2px #e2e8f0;position:absolute;left:-21px;}
+.pc-card{flex:1;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color 0.15s,box-shadow 0.15s;}
+.pc-card:hover{border-color:#818cf8;box-shadow:0 2px 12px rgba(99,102,241,0.1);}
+.pc-done{background:#f0fdf4;border-color:#bbf7d0;}
+.pc-active{background:#fffbeb;border-color:#fde68a;}
+.pc-upcoming{background:white;}
+.pc-future{background:#f8fafc;border-style:dashed;}
+.pc-head{display:flex;align-items:flex-start;gap:12px;}
+.pc-icon{font-size:22px;flex-shrink:0;margin-top:1px;}
+.pc-title{font-size:13px;font-weight:600;color:#1e293b;margin-bottom:3px;}
+.pc-sub{font-size:11px;color:#64748b;line-height:1.4;}
+.pc-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;white-space:nowrap;margin-left:auto;flex-shrink:0;}
+.pc-badge.done{background:#d1fae5;color:#065f46;}
+.pc-badge.active{background:#fef3c7;color:#92400e;}
+.pc-badge.upcoming{background:#dbeafe;color:#1e40af;}
+.pc-badge.future{background:#f1f5f9;color:#64748b;}
+.pc-tasks{margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,0.06);display:flex;flex-direction:column;gap:5px;}
+.pc-task{font-size:12px;color:#475569;display:flex;align-items:center;gap:6px;}
+.pc-task.done{color:#94a3b8;text-decoration:line-through;}
+.pc-task.open{color:#475569;}
 </style>
 </head>
 <body>
@@ -210,14 +232,14 @@ table{border-collapse:collapse;font-size:12px;}
       <button class="nb" id="btn-focus" onclick="showTab('focus')">&#9638; Maandagochtend Focus</button>
       <button class="nb active" id="btn-matrix" onclick="showTab('matrix')">&#9641; Budgethouder-Matrix</button>
       <button class="nb" id="btn-pitch" onclick="showTab('pitch')">&#9650; Pitch voor I&amp;A</button>
-      <button class="nb dim">&#9711; P&amp;C Monitor (binnenkort)</button>
+      <button class="nb" id="btn-pc" onclick="showTab('pc')">&#9711; P&amp;C Monitor</button>
     </div>
     <div class="sb-footer">
       <div class="cap-row"><span class="cap-lbl">Strateeg-Check</span><span class="cap-val">18/24u</span></div>
       <div class="cap-bar"><div class="cap-fill"></div></div>
       <div class="cap-hint">Instroom: <b>Beperkt (6u)</b></div>
       <div class="ag-section">
-        <div class="ag-lbl">Agenda-sync Outlook</div>
+        <div class="ag-lbl">Agenda-sync Google Calendar</div>
         <div class="ag-item"><div class="ag-dot" style="background:#ef4444"></div><span class="ag-text"><b>Vr 28/3</b> — Wethouder Jeugdzorg</span></div>
         <div class="ag-item"><div class="ag-dot" style="background:#f59e0b"></div><span class="ag-text"><b>Di 1/4</b> — MT Kadernota</span></div>
         <div class="ag-item"><div class="ag-dot" style="background:#34d399"></div><span class="ag-text"><b>Wo 9/4</b> — HR data Visma</span></div>
@@ -235,7 +257,7 @@ table{border-collapse:collapse;font-size:12px;}
         </div>
         <div class="ritual-steps">
           <div class="ritual-step"><div class="step-num done">1</div><div><div class="step-title">Strateeg-Check — hoeveel ruimte heb ik?</div><div class="step-desc">Focus-kolom telt <b>2</b> van de 3 slots bezet. Capaciteit: <b>18/24u</b>.</div><span class="step-tag amber">Beperkt — max 1 nieuwe taak (6u vrij)</span></div></div>
-          <div class="ritual-step"><div class="step-num warn">2</div><div><div class="step-title">Deadlines — wat brandt er deze week?</div><div class="step-desc">Kaarten met een agenda-badge zijn aan Outlook gekoppeld.</div><span class="step-tag red">&#128197; Vr 28/3 — Wethouder Jeugdzorg</span></div></div>
+          <div class="ritual-step"><div class="step-num warn">2</div><div><div class="step-title">Deadlines — wat brandt er deze week?</div><div class="step-desc">Kaarten met een agenda-badge zijn aan Google Calendar gekoppeld.</div><span class="step-tag red">&#128197; Vr 28/3 — Wethouder Jeugdzorg</span></div></div>
           <div class="ritual-step"><div class="step-num ok">3</div><div><div class="step-title">Wachten Op — wat heb ik nodig van anderen?</div><div class="step-desc"><b>1</b> dossier ligt bij anderen. Reminder nodig?</div><span class="step-tag amber">&#9203; Formatie-uren — wacht op HR/Visma</span></div></div>
           <div class="ritual-step"><div class="step-num ok">4</div><div><div class="step-title">Nieuw ingestroomd — eerst parkeren</div><div class="step-desc">Alles wat nog niet in de matrix staat gaat naar Info-Sluis.</div><span class="step-tag blue">&#128229; Info-Sluis is je buffer</span></div></div>
           <div class="ritual-step"><div class="step-num ok">5</div><div><div class="step-title">Evergreen — wat loopt door naar volgende cyclus?</div><div class="step-desc">Kaarten met een geel &#8594;-badge bevatten info voor de volgende P&amp;C cyclus.</div><span class="step-tag green">&#8635; Subsidiebeschikking Welzijn &#8594; Jaarrekening 2026</span></div></div>
@@ -332,7 +354,7 @@ table{border-collapse:collapse;font-size:12px;}
         <div><div class="focus-hdr">Doolhof vs Cockpit</div><div class="focus-sub">Business case voor Team I&amp;A</div></div>
         <div class="p-grid">
           <div class="p-col old"><div class="p-col-title">Oude wereld — cognitieve doolhof</div>
-            <div class="p-item"><div class="p-dot" style="background:#fca5a5"></div>Informatieversnippering via Outlook, Teams en T-schijf</div>
+            <div class="p-item"><div class="p-dot" style="background:#fca5a5"></div>Informatieversnippering via Gmail, Google Drive en T-schijf</div>
             <div class="p-item"><div class="p-dot" style="background:#fca5a5"></div>Energieverlies door zoeken naar bestanden en mailcontext</div>
             <div class="p-item"><div class="p-dot" style="background:#fca5a5"></div>Continuïteitsrisico: afspraken in hoofd of losse notities</div>
             <div class="p-item"><div class="p-dot" style="background:#fca5a5"></div>P&C deadlines en ad-hoc advies lopen door elkaar</div>
@@ -356,6 +378,134 @@ table{border-collapse:collapse;font-size:12px;}
             <div class="erg-col"><div class="erg-lbl">Cyclus-overdracht</div><div class="erg-txt">Evergreen-kaart: Jaarrekening T-1 &#8594; Begroting T+1.</div></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- P&C MONITOR PANEL -->
+    <div class="panel" id="panel-pc">
+      <div style="padding:24px;display:flex;flex-direction:column;gap:20px;overflow:auto;">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:#1e293b;">P&amp;C Monitor — Cyclus 2025 / 2026</div>
+          <div style="font-size:13px;color:#64748b;margin-top:3px;">Planning &amp; Control kalender · Klik een document voor details</div>
+        </div>
+
+        <!-- TIJDLIJN -->
+        <div style="position:relative;padding-left:32px;">
+          <!-- verticale lijn -->
+          <div style="position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:#e2e8f0;border-radius:2px;"></div>
+
+          <!-- 1. Jaarrekening 2024 -->
+          <div class="pc-item" onclick="openPc('jr2024')">
+            <div class="pc-dot" style="background:#10b981;"></div>
+            <div class="pc-card pc-done">
+              <div class="pc-head">
+                <span class="pc-icon">✅</span>
+                <div>
+                  <div class="pc-title">Jaarrekening 2024</div>
+                  <div class="pc-sub">Verantwoording realisatie t.o.v. begroting 2024 · Gereed</div>
+                </div>
+                <span class="pc-badge done">Gereed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Kadernota -->
+          <div class="pc-item" onclick="openPc('kadernota')">
+            <div class="pc-dot" style="background:#f59e0b;"></div>
+            <div class="pc-card pc-active">
+              <div class="pc-head">
+                <span class="pc-icon">📐</span>
+                <div>
+                  <div class="pc-title">Kadernota 2026</div>
+                  <div class="pc-sub">Beleidsmatige en financiële kaders voor begroting 2026 · Deadline: juni 2025</div>
+                </div>
+                <span class="pc-badge active">Actief</span>
+              </div>
+              <div class="pc-tasks">
+                <div class="pc-task open">☐ Doorrekening concernrichtlijnen inflatie</div>
+                <div class="pc-task open">☐ Inventarisatie nieuw beleid per domein</div>
+                <div class="pc-task open">☐ Afstemming wethouder(s)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Primitieve begroting 2026 + meerjarenraming -->
+          <div class="pc-item" onclick="openPc('begroting')">
+            <div class="pc-dot" style="background:#6366f1;"></div>
+            <div class="pc-card pc-upcoming">
+              <div class="pc-head">
+                <span class="pc-icon">📊</span>
+                <div>
+                  <div class="pc-title">Primitieve begroting 2026 + meerjarenraming 2027–2030</div>
+                  <div class="pc-sub">Vaststelling door raad · Deadline: november 2025</div>
+                </div>
+                <span class="pc-badge upcoming">Gepland</span>
+              </div>
+              <div class="pc-tasks">
+                <div class="pc-task open">☐ Verwerken Kadernota-besluiten</div>
+                <div class="pc-task open">☐ Meerjarenraming 2027–2030 doorrekenen</div>
+                <div class="pc-task open">☐ Raadsvoorstel opstellen</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. 2e Bestuursrapportage / 3e Kwartaalrapportage -->
+          <div class="pc-item" onclick="openPc('burap')">
+            <div class="pc-dot" style="background:#f97316;"></div>
+            <div class="pc-card pc-upcoming">
+              <div class="pc-head">
+                <span class="pc-icon">📈</span>
+                <div>
+                  <div class="pc-title">2e Bestuursrapportage / 3e Kwartaalrapportage 2025</div>
+                  <div class="pc-sub">Voortgang realisatie begroting 2025 t/m Q3 · Deadline: oktober 2025</div>
+                </div>
+                <span class="pc-badge upcoming">Gepland</span>
+              </div>
+              <div class="pc-tasks">
+                <div class="pc-task open">☐ Data-uitvraag budgethouders</div>
+                <div class="pc-task open">☐ Analyse afwijkingen &gt; €50k</div>
+                <div class="pc-task open">☐ Bijstelling prognose jaareinde</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Jaarrekening 2025 -->
+          <div class="pc-item" onclick="openPc('jr2025')">
+            <div class="pc-dot" style="background:#06b6d4;"></div>
+            <div class="pc-card pc-upcoming">
+              <div class="pc-head">
+                <span class="pc-icon">📋</span>
+                <div>
+                  <div class="pc-title">Jaarrekening 2025</div>
+                  <div class="pc-sub">Verantwoording realisatie t.o.v. begroting 2025 · Deadline: april 2026</div>
+                </div>
+                <span class="pc-badge upcoming">Gepland</span>
+              </div>
+              <div class="pc-tasks">
+                <div class="pc-task open">☐ Afsluiting grootboek</div>
+                <div class="pc-task open">☐ Controleverklaring accountant</div>
+                <div class="pc-task open">☐ Raadsvaststelling</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Jaarrekening 2026 -->
+          <div class="pc-item" onclick="openPc('jr2026')">
+            <div class="pc-dot" style="background:#84cc16;"></div>
+            <div class="pc-card pc-future">
+              <div class="pc-head">
+                <span class="pc-icon">🔭</span>
+                <div>
+                  <div class="pc-title">Jaarrekening 2026</div>
+                  <div class="pc-sub">Verantwoording realisatie t.o.v. begroting 2026 · Deadline: april 2027</div>
+                </div>
+                <span class="pc-badge future">Toekomst</span>
+              </div>
+              <div style="font-size:11px;color:#94a3b8;margin-top:6px;font-style:italic;">Evergreen-kaarten uit huidige cyclus vloeien hiernaartoe door.</div>
+            </div>
+          </div>
+
+        </div><!-- end tijdlijn -->
       </div>
     </div>
 
@@ -426,13 +576,13 @@ var currentFn='';
    ❤️‍🩹 Welzijn/Subsidies   — teamleider Sociaal + subsidiecoördinator
 */
 var CARDS={
-  jeugd:{domain:'Sociaal Domein · Jeugd & Gezin',title:'Dekking zoeken tekort Jeugdzorg 2026',icon:'🧒',iconLabel:'Jeugd & Gezin',stakeholders:'Afstemmen met: teamleider Jeugd + HR adviseur',avg:'conf',avgLabel:'VERTROUWELIJK',tags:[{cls:'bbv',label:'#BBV-verplichting'},{cls:'piek',label:'#Piekbelasting'}],links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/Jeugd/VJN2026/',mail:false},{ico:'ind',name:'Teams: Kanaal Zorgtekorten',sub:'teams.microsoft.com/jeugd-zorgtekorten',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Jeugdzorg 2026',mail:true}],kladblok:'- Sjaak (Beheer) wil format X, Marieke (Sociaal) levert format Y.\n- Verschillenanalyse LIAS vs Kadernota: +200k.\n- Reserve sociaal domein bijna leeg — alternatief zoeken in algemene middelen?',log:'12/03: Afspraak met wethouder gemaakt voor a.s. vrijdag.\n10/03: MT akkoord met eerste doorrekening.',checks:[{t:'Cijfers uitdraaien uit LIAS',done:true},{t:'Verschillenanalyse t.o.v. Kadernota',done:true},{t:'Format Marieke ombouwen naar format Sjaak',done:false},{t:'Concept sturen naar Senior voor check',done:false}],cyclus:'Gekoppeld aan: Kadernota 2025 (T-1)',labels:'r b',footer:'<span class="tg bbv">BBV</span><span class="tg piek">Piekbelasting</span><span class="ab">Vr 28/3</span><span class="mb">3</span><span class="logdot"></span><span class="avg conf">VERTROUWELIJK</span>'},
-  welzijn:{domain:'Sociaal Domein · Wmo & Zorg',title:'Subsidiebeschikking Welzijn controleren',icon:'❤️',iconLabel:'Wmo & Welzijn',stakeholders:'Afstemmen met: teamleider Zorg + subsidiecoördinator',avg:'intern',avgLabel:'INTERN',tags:[{cls:'vol',label:'#Volgende_Cyclus'}],links:[{ico:'ind',name:'DMS: Getekende beschikking',sub:'file:///S:/Dossiers/Welzijn/Beschikking2026.pdf',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Welzijn Subsidies',mail:true}],kladblok:'Rechtmatigheid is gecheckt. Budgetuitputting nog controleren.',log:'28/02: Definitief akkoord getekend door wethouder.',checks:[{t:'Check rechtmatigheid',done:false},{t:'Check budgetuitputting',done:false}],cyclus:'Vloeit door naar: Jaarrekening 2026',labels:'g',footer:'<span class="tg vol">Volgende cyclus</span><span class="cb">&#8594; Jaarrekening</span><span class="logdot"></span><span class="avg intern">INTERN</span>'},
-  formatie:{domain:'Bedrijfsvoering · HRM & Organisatie',title:'Formatie-uren doorrekenen reorganisatie',icon:'👥',iconLabel:'Personeel & Formatie',stakeholders:'⚠️ Dubbele afstemming: teamleider vakafdeling + HR adviseur',avg:'sec',avgLabel:'GEHEIM',tags:[{cls:'bbv',label:'#BBV-verplichting'}],links:[{ico:'ind',name:'Visma Export Map',sub:'file:///P:/HRM/Visma/Export2026/',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Reorganisatie HR',mail:true}],kladblok:'Wacht op definitieve uitdraai van HR (Visma). Pas na ontvangst kan ik de loonsommen indexeren.',log:'01/03: HR levert data uiterlijk week 14 aan.',checks:[{t:'Aanvraag data bij HR',done:true},{t:'Bestand opschonen',done:false},{t:'Doorrekening maken incl. cao-stijging',done:false}],cyclus:'',labels:'g y',footer:'<span class="ks">&#10003; 1/3</span><span class="mb">1</span><span class="logdot"></span><span class="avg sec">GEHEIM</span>'},
-  ia:{domain:'Bedrijfsvoering · I&A / Informatisering',title:'Analyse nieuwe software licenties',icon:'💻',iconLabel:'I&A / Digitaal',stakeholders:'Afstemmen met: I&A manager + directie',avg:'intern',avgLabel:'INTERN',tags:[{cls:'str',label:'#Strategisch_Advies'}],links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: I&A Licenties',mail:true}],kladblok:'I&A manager vraagt business case Microsoft E5 vs E3. Schatting: ±8u werk.',log:'Nog geen besluit. Wacht op capaciteits-check.',checks:[],cyclus:'',labels:'g',footer:'<span class="tg str">Strategisch</span><span class="mb">1</span><span class="avg intern">INTERN</span>'},
+  jeugd:{domain:'Sociaal Domein · Jeugd & Gezin',title:'Dekking zoeken tekort Jeugdzorg 2026',icon:'🧒',iconLabel:'Jeugd & Gezin',stakeholders:'Afstemmen met: teamleider Jeugd + HR adviseur',avg:'conf',avgLabel:'VERTROUWELIJK',tags:[{cls:'bbv',label:'#BBV-verplichting'},{cls:'piek',label:'#Piekbelasting'}],links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/Jeugd/VJN2026/',mail:false},{ico:'ind',name:'Google Chat: Zorgtekorten',sub:'chat.google.com/zorgtekorten',mail:false},{ico:'sl',name:'Mail-Context (Google Mail Sync)',sub:'Gmail → label: Jeugdzorg 2026',mail:true}],kladblok:'- Sjaak (Beheer) wil format X, Marieke (Sociaal) levert format Y.\n- Verschillenanalyse LIAS vs Kadernota: +200k.\n- Reserve sociaal domein bijna leeg — alternatief zoeken in algemene middelen?',log:'12/03: Afspraak met wethouder gemaakt voor a.s. vrijdag.\n10/03: MT akkoord met eerste doorrekening.',checks:[{t:'Cijfers uitdraaien uit LIAS',done:true},{t:'Verschillenanalyse t.o.v. Kadernota',done:true},{t:'Format Marieke ombouwen naar format Sjaak',done:false},{t:'Concept sturen naar Senior voor check',done:false}],cyclus:'Gekoppeld aan: Kadernota 2025 (T-1)',labels:'r b',footer:'<span class="tg bbv">BBV</span><span class="tg piek">Piekbelasting</span><span class="ab">Vr 28/3</span><span class="mb">3</span><span class="logdot"></span><span class="avg conf">VERTROUWELIJK</span>'},
+  welzijn:{domain:'Sociaal Domein · Wmo & Zorg',title:'Subsidiebeschikking Welzijn controleren',icon:'❤️',iconLabel:'Wmo & Welzijn',stakeholders:'Afstemmen met: teamleider Zorg + subsidiecoördinator',avg:'intern',avgLabel:'INTERN',tags:[{cls:'vol',label:'#Volgende_Cyclus'}],links:[{ico:'ind',name:'DMS: Getekende beschikking',sub:'file:///S:/Dossiers/Welzijn/Beschikking2026.pdf',mail:false},{ico:'sl',name:'Mail-Context (Google Mail Sync)',sub:'Gmail → label: Welzijn Subsidies',mail:true}],kladblok:'Rechtmatigheid is gecheckt. Budgetuitputting nog controleren.',log:'28/02: Definitief akkoord getekend door wethouder.',checks:[{t:'Check rechtmatigheid',done:false},{t:'Check budgetuitputting',done:false}],cyclus:'Vloeit door naar: Jaarrekening 2026',labels:'g',footer:'<span class="tg vol">Volgende cyclus</span><span class="cb">&#8594; Jaarrekening</span><span class="logdot"></span><span class="avg intern">INTERN</span>'},
+  formatie:{domain:'Bedrijfsvoering · HRM & Organisatie',title:'Formatie-uren doorrekenen reorganisatie',icon:'👥',iconLabel:'Personeel & Formatie',stakeholders:'⚠️ Dubbele afstemming: teamleider vakafdeling + HR adviseur',avg:'sec',avgLabel:'GEHEIM',tags:[{cls:'bbv',label:'#BBV-verplichting'}],links:[{ico:'ind',name:'Visma Export Map',sub:'file:///P:/HRM/Visma/Export2026/',mail:false},{ico:'sl',name:'Mail-Context (Google Mail Sync)',sub:'Gmail → label: Reorganisatie HR',mail:true}],kladblok:'Wacht op definitieve uitdraai van HR (Visma). Pas na ontvangst kan ik de loonsommen indexeren.',log:'01/03: HR levert data uiterlijk week 14 aan.',checks:[{t:'Aanvraag data bij HR',done:true},{t:'Bestand opschonen',done:false},{t:'Doorrekening maken incl. cao-stijging',done:false}],cyclus:'',labels:'g y',footer:'<span class="ks">&#10003; 1/3</span><span class="mb">1</span><span class="logdot"></span><span class="avg sec">GEHEIM</span>'},
+  ia:{domain:'Bedrijfsvoering · I&A / Informatisering',title:'Analyse nieuwe software licenties',icon:'💻',iconLabel:'I&A / Digitaal',stakeholders:'Afstemmen met: I&A manager + directie',avg:'intern',avgLabel:'INTERN',tags:[{cls:'str',label:'#Strategisch_Advies'}],links:[{ico:'sl',name:'Mail-Context (Google Mail Sync)',sub:'Gmail → label: I&A Licenties',mail:true}],kladblok:'I&A manager vraagt business case Microsoft E5 vs E3. Schatting: ±8u werk.',log:'Nog geen besluit. Wacht op capaciteits-check.',checks:[],cyclus:'',labels:'g',footer:'<span class="tg str">Strategisch</span><span class="mb">1</span><span class="avg intern">INTERN</span>'},
   vjn:{domain:'Bedrijfsvoering · Financiën & Control',title:'Voorjaarsnota: teksten Bedrijfsvoering reviewen',icon:'📋',iconLabel:'Financiën & P&C',stakeholders:'Afstemmen met: controller + concernadviseur financiën',avg:'intern',avgLabel:'INTERN',tags:[{cls:'bbv',label:'#BBV-verplichting'}],links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/VJN2026/Bedrijfsvoering/',mail:false}],kladblok:'Kijken of de aannames voor inflatie kloppen met de concernrichtlijn.',log:'Nog geen besluit.',checks:[{t:'Richtlijn erbij pakken',done:false},{t:'Teksten scannen op afwijkingen',done:false}],cyclus:'',labels:'r',footer:'<span class="tg bbv">BBV</span><span class="ks">&#10003; 0/2</span><span class="avg intern">INTERN</span>'},
-  vastgoed:{domain:'Ruimtelijke Ordening · Vastgoed',title:'Reservepositie — vraag wethouder',icon:'🏛️',iconLabel:'Vastgoed & RO',stakeholders:'Afstemmen met: teamleider RO + vastgoedcoördinator',avg:'conf',avgLabel:'VERTROUWELIJK',tags:[{cls:'str',label:'#Strategisch_Advies'}],links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Vastgoed Reserves',mail:true}],kladblok:'Huidige stand reserves vastgoed in kaart brengen tbv verkoop oude school.',log:'',checks:[],cyclus:'',labels:'b',footer:'<span class="tg str">Strategisch</span><span class="ab">Di 1/4</span><span class="mb">4</span><span class="avg conf">VERTROUWELIJK</span>'},
-  parkeren:{domain:'Ruimtelijke Ordening · Grote Projecten',title:'Reservepositie parkeren — vraag wethouder',icon:'🅿️',iconLabel:'Parkeren & Mobiliteit',stakeholders:'Afstemmen met: teamleider Grote Projecten + wethouder RO',avg:'open',avgLabel:'OPENBAAR',tags:[],links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Parkeren RO',mail:true}],kladblok:'Binnengekomen via de mail. Nog geen actie ondernemen — eerst parkeren.',log:'',checks:[],cyclus:'',labels:'b',footer:'<span style="font-size:11px;color:#94a3b8;">Geparkeerd</span><span class="avg open">OPENBAAR</span>'}
+  vastgoed:{domain:'Ruimtelijke Ordening · Vastgoed',title:'Reservepositie — vraag wethouder',icon:'🏛️',iconLabel:'Vastgoed & RO',stakeholders:'Afstemmen met: teamleider RO + vastgoedcoördinator',avg:'conf',avgLabel:'VERTROUWELIJK',tags:[{cls:'str',label:'#Strategisch_Advies'}],links:[{ico:'sl',name:'Mail-Context (Google Mail Sync)',sub:'Gmail → label: Vastgoed Reserves',mail:true}],kladblok:'Huidige stand reserves vastgoed in kaart brengen tbv verkoop oude school.',log:'',checks:[],cyclus:'',labels:'b',footer:'<span class="tg str">Strategisch</span><span class="ab">Di 1/4</span><span class="mb">4</span><span class="avg conf">VERTROUWELIJK</span>'},
+  parkeren:{domain:'Ruimtelijke Ordening · Grote Projecten',title:'Reservepositie parkeren — vraag wethouder',icon:'🅿️',iconLabel:'Parkeren & Mobiliteit',stakeholders:'Afstemmen met: teamleider Grote Projecten + wethouder RO',avg:'open',avgLabel:'OPENBAAR',tags:[],links:[{ico:'sl',name:'Mail-Context (Google Mail Sync)',sub:'Gmail → label: Parkeren RO',mail:true}],kladblok:'Binnengekomen via de mail. Nog geen actie ondernemen — eerst parkeren.',log:'',checks:[],cyclus:'',labels:'b',footer:'<span style="font-size:11px;color:#94a3b8;">Geparkeerd</span><span class="avg open">OPENBAAR</span>'}
 };
 function renderMatrix(){
   var tbody=document.getElementById('matrix-body');if(!tbody)return;
@@ -605,7 +755,7 @@ function openOverlay(id){document.getElementById(id).className='overlay open';}
 function closeOverlay(id){document.getElementById(id).className='overlay';}
 function openRitual(){openOverlay('overlay-ritual');}
 function showTab(name){
-  var tabs=['focus','matrix','pitch'];
+  var tabs=['focus','matrix','pitch','pc'];
   for(var i=0;i<tabs.length;i++){
     var p=document.getElementById('panel-'+tabs[i]),b=document.getElementById('btn-'+tabs[i]);
     if(p)p.className='panel'+(tabs[i]===name?' active':'');
