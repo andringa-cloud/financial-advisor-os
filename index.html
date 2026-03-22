@@ -1,200 +1,201 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financial Advisor OS</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif;}
-body{background:#f1f5f9;}
-.app{display:flex;height:720px;overflow:hidden;border-radius:12px;border:1px solid #e2e8f0;}
-.sb{width:210px;flex-shrink:0;background:#1a1f2e;display:flex;flex-direction:column;z-index:10;}
-.sb-head{padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,0.07);}
-.sb-title{font-size:12px;font-weight:600;color:#818cf8;}
-.sb-sub{font-size:10px;color:#475569;margin-top:2px;}
-.nav-items{padding:10px 8px;flex:1;display:flex;flex-direction:column;gap:3px;}
-.nb{width:100%;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#94a3b8;text-align:left;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;}
+html,body{height:100%;background:#f1f5f9;}
+.app{display:flex;height:100vh;overflow:hidden;}
+.sb{width:230px;flex-shrink:0;background:#1a1f2e;display:flex;flex-direction:column;z-index:10;}
+.sb-head{padding:20px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.sb-title{font-size:14px;font-weight:600;color:#818cf8;}
+.sb-sub{font-size:11px;color:#475569;margin-top:2px;}
+.nav-items{padding:12px 10px;flex:1;display:flex;flex-direction:column;gap:3px;}
+.nb{width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:none;background:transparent;color:#94a3b8;text-align:left;}
 .nb:hover{background:rgba(255,255,255,0.07);color:#e2e8f0;}
 .nb.active{background:#4338ca;color:white;}
 .nb.dim{opacity:0.35;cursor:not-allowed;pointer-events:none;}
-.ritual-btn{margin:8px 8px 0;padding:9px 10px;border-radius:8px;border:1px solid rgba(251,191,36,0.4);background:rgba(251,191,36,0.08);color:#fbbf24;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;width:calc(100% - 16px);text-align:left;}
+.ritual-btn{margin:10px 10px 0;padding:10px 12px;border-radius:8px;border:1px solid rgba(251,191,36,0.4);background:rgba(251,191,36,0.08);color:#fbbf24;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;width:calc(100% - 20px);text-align:left;}
 .ritual-btn:hover{background:rgba(251,191,36,0.18);}
-.sb-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.07);}
-.cap-row{display:flex;justify-content:space-between;margin-bottom:4px;}
+.sb-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.07);}
+.cap-row{display:flex;justify-content:space-between;margin-bottom:5px;}
 .cap-lbl{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;}
-.cap-val{font-size:11px;font-weight:600;color:#f59e0b;}
-.cap-bar{height:6px;background:#2d3748;border-radius:3px;overflow:hidden;margin-bottom:5px;}
+.cap-val{font-size:12px;font-weight:600;color:#f59e0b;}
+.cap-bar{height:7px;background:#2d3748;border-radius:3px;overflow:hidden;margin-bottom:6px;}
 .cap-fill{height:100%;width:75%;background:#f59e0b;border-radius:3px;}
-.cap-hint{font-size:10px;color:#475569;}
+.cap-hint{font-size:11px;color:#475569;}
 .cap-hint b{color:#f59e0b;}
-.ag-section{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.07);}
-.ag-lbl{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;}
-.ag-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.ag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.ag-text{font-size:10px;color:#64748b;}
+.ag-section{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.07);}
+.ag-lbl{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.ag-item{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.ag-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ag-text{font-size:11px;color:#64748b;}
 .ag-text b{color:#94a3b8;}
 .main{flex:1;display:flex;flex-direction:column;background:#f8fafc;overflow:hidden;position:relative;}
 .panel{display:none;flex:1;overflow:auto;flex-direction:column;height:100%;}
 .panel.active{display:flex;}
 .overlay{position:absolute;inset:0;background:rgba(15,23,42,0.65);z-index:50;display:none;align-items:center;justify-content:center;}
 .overlay.open{display:flex;}
-.ritual-modal{background:white;border-radius:14px;width:420px;max-height:90%;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
-.ritual-head{background:linear-gradient(135deg,#1a1f2e,#312e81);padding:20px 22px;color:white;position:relative;border-radius:14px 14px 0 0;}
-.ritual-head-title{font-size:16px;font-weight:700;margin-bottom:4px;}
-.ritual-head-sub{font-size:11px;color:#a5b4fc;}
-.modal-x{position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.1);border:none;color:white;font-size:16px;width:28px;height:28px;border-radius:6px;cursor:pointer;}
+.ritual-modal{background:white;border-radius:14px;width:480px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.ritual-head{background:linear-gradient(135deg,#1a1f2e,#312e81);padding:24px 26px;color:white;position:relative;border-radius:14px 14px 0 0;}
+.ritual-head-title{font-size:18px;font-weight:700;margin-bottom:4px;}
+.ritual-head-sub{font-size:12px;color:#a5b4fc;}
+.modal-x{position:absolute;top:16px;right:18px;background:rgba(255,255,255,0.1);border:none;color:white;font-size:17px;width:30px;height:30px;border-radius:6px;cursor:pointer;line-height:1;}
 .modal-x:hover{background:rgba(255,255,255,0.2);}
 .ritual-steps{padding:0;}
-.ritual-step{display:flex;align-items:flex-start;gap:12px;padding:13px 22px;border-bottom:1px solid #f1f5f9;}
+.ritual-step{display:flex;align-items:flex-start;gap:14px;padding:16px 26px;border-bottom:1px solid #f1f5f9;}
 .ritual-step:last-child{border-bottom:none;}
-.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px;}
 .step-num.done{background:#4338ca;color:white;}
 .step-num.warn{background:#f59e0b;color:white;}
 .step-num.ok{background:#10b981;color:white;}
-.step-title{font-size:12px;font-weight:600;color:#1e293b;margin-bottom:3px;}
-.step-desc{font-size:11px;color:#64748b;line-height:1.5;}
-.step-tag{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;margin-top:5px;}
+.step-title{font-size:13px;font-weight:600;color:#1e293b;margin-bottom:4px;}
+.step-desc{font-size:12px;color:#64748b;line-height:1.5;}
+.step-tag{display:inline-flex;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;margin-top:6px;}
 .step-tag.red{background:#fee2e2;color:#991b1b;}
 .step-tag.amber{background:#fef3c7;color:#92400e;}
 .step-tag.green{background:#d1fae5;color:#065f46;}
 .step-tag.blue{background:#dbeafe;color:#1e40af;}
-.modal-footer{padding:12px 22px;background:#f8fafc;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid #f1f5f9;border-radius:0 0 14px 14px;}
-.btn-sec{padding:8px 18px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;}
+.modal-footer{padding:14px 26px;background:#f8fafc;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #f1f5f9;border-radius:0 0 14px 14px;}
+.btn-sec{padding:9px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;}
 .btn-sec:hover{background:#f1f5f9;}
-.btn-pri{padding:8px 18px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:#4338ca;color:white;}
+.btn-pri{padding:9px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:#4338ca;color:white;}
 .btn-pri:hover{background:#3730a3;}
-.export-modal{background:white;border-radius:12px;width:500px;max-height:90%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);display:flex;flex-direction:column;}
-.export-head{background:#1a1f2e;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.export-head-title{font-size:13px;font-weight:600;color:white;}
-.export-head-sub{font-size:10px;color:#64748b;margin-top:2px;}
-.md-preview{padding:16px 20px;background:#0f172a;font-family:monospace;font-size:11px;color:#94a3b8;line-height:1.7;overflow-y:auto;white-space:pre-wrap;word-break:break-all;flex:1;max-height:300px;}
+.export-modal{background:white;border-radius:12px;width:560px;max-height:90vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);display:flex;flex-direction:column;}
+.export-head{background:#1a1f2e;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.export-head-title{font-size:14px;font-weight:600;color:white;}
+.export-head-sub{font-size:11px;color:#64748b;margin-top:2px;}
+.md-preview{padding:18px 22px;background:#0f172a;font-family:monospace;font-size:12px;color:#94a3b8;line-height:1.7;overflow-y:auto;white-space:pre-wrap;word-break:break-all;flex:1;max-height:340px;}
 .md-preview .mh1{color:#818cf8;font-weight:700;}
 .md-preview .mh2{color:#38bdf8;font-weight:600;}
 .md-preview .mck{color:#34d399;}
 .md-preview .mco{color:#f59e0b;}
 .md-preview .mtg{color:#fbbf24;}
 .md-preview .mlk{color:#60a5fa;}
-.export-footer{padding:12px 20px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e2e8f0;flex-shrink:0;}
-.export-fn{font-size:10px;color:#64748b;font-family:monospace;}
-.btn-copy{padding:7px 14px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#4338ca;}
-.btn-dl{padding:7px 14px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:#4338ca;color:white;}
-.search-wrap{padding:10px 14px;background:white;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;flex-shrink:0;position:relative;}
-.search-input{flex:1;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:11px;color:#1e293b;outline:none;}
+.export-footer{padding:14px 22px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e2e8f0;flex-shrink:0;}
+.export-fn{font-size:11px;color:#64748b;font-family:monospace;}
+.btn-copy{padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#4338ca;}
+.btn-dl{padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:#4338ca;color:white;}
+.search-wrap{padding:12px 16px;background:white;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:10px;flex-shrink:0;position:relative;}
+.search-input{flex:1;border:1px solid #e2e8f0;border-radius:7px;padding:8px 12px;font-size:13px;color:#1e293b;outline:none;}
 .search-input:focus{border-color:#818cf8;}
-.search-hint{font-size:10px;color:#94a3b8;white-space:nowrap;}
-.search-results{position:absolute;top:41px;left:14px;right:14px;background:white;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.1);z-index:40;max-height:220px;overflow-y:auto;display:none;}
+.search-hint{font-size:11px;color:#94a3b8;white-space:nowrap;}
+.search-results{position:absolute;top:48px;left:16px;right:16px;background:white;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.1);z-index:40;max-height:280px;overflow-y:auto;display:none;}
 .search-results.open{display:block;}
-.sr-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid #f1f5f9;}
+.sr-item{padding:11px 14px;cursor:pointer;border-bottom:1px solid #f1f5f9;}
 .sr-item:last-child{border-bottom:none;}
 .sr-item:hover{background:#f8fafc;}
-.sr-title{font-size:11px;font-weight:500;color:#1e293b;}
-.sr-meta{font-size:10px;color:#64748b;margin-top:2px;}
-.avg{display:inline-flex;align-items:center;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:0.03em;}
+.sr-title{font-size:12px;font-weight:500;color:#1e293b;}
+.sr-meta{font-size:11px;color:#64748b;margin-top:2px;}
+.avg{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:0.03em;}
 .avg.open{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;}
 .avg.intern{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;}
 .avg.conf{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;}
 .avg.sec{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;}
-.focus-wrap{padding:18px;display:flex;flex-direction:column;gap:14px;}
-.focus-hdr{font-size:14px;font-weight:600;color:#1e293b;}
-.focus-sub{font-size:11px;color:#64748b;margin-top:2px;}
-.focus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.fc{border-radius:10px;padding:14px;border:1px solid;}
+.focus-wrap{padding:24px;display:flex;flex-direction:column;gap:18px;}
+.focus-hdr{font-size:18px;font-weight:700;color:#1e293b;}
+.focus-sub{font-size:13px;color:#64748b;margin-top:3px;}
+.focus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.fc{border-radius:12px;padding:18px;border:1px solid;}
 .fc.ind{background:#eef2ff;border-color:#c7d2fe;}
 .fc.amb{background:#fffbeb;border-color:#fde68a;}
 .fc.redd{background:#fef2f2;border-color:#fecaca;}
-.fc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
-.fc-title{font-size:12px;font-weight:600;}
+.fc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.fc-title{font-size:13px;font-weight:600;}
 .fc-title.ind{color:#3730a3;}.fc-title.amb{color:#92400e;}.fc-title.redd{color:#991b1b;}
-.fc-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+.fc-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;}
 .fc-badge.ind{background:#c7d2fe;color:#3730a3;}.fc-badge.amb{background:#fde68a;color:#92400e;}.fc-badge.redd{background:#fecaca;color:#991b1b;}
-.fc-desc{font-size:10px;margin-bottom:10px;line-height:1.4;}
+.fc-desc{font-size:11px;margin-bottom:12px;line-height:1.4;}
 .fc-desc.ind{color:#4338ca;}.fc-desc.amb{color:#b45309;}.fc-desc.redd{color:#b91c1c;}
-.matrix-outer{flex:1;overflow:auto;padding:14px;}
-table{border-collapse:collapse;font-size:11px;}
-.corner{padding:8px 10px;border:1px solid #e2e8f0;background:#f8fafc;font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;width:120px;}
-.col-hdr{padding:8px 10px;border:1px solid #e2e8f0;background:white;vertical-align:top;min-width:160px;}
-.col-name{font-size:11px;font-weight:600;color:#1e293b;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;}
-.col-count{font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;background:#f1f5f9;color:#64748b;}
+.matrix-outer{flex:1;overflow:auto;padding:16px;}
+table{border-collapse:collapse;font-size:12px;}
+.corner{padding:10px 12px;border:1px solid #e2e8f0;background:#f8fafc;font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.05em;width:130px;}
+.col-hdr{padding:10px 12px;border:1px solid #e2e8f0;background:white;vertical-align:top;min-width:180px;}
+.col-name{font-size:12px;font-weight:600;color:#1e293b;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;}
+.col-count{font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px;background:#f1f5f9;color:#64748b;}
 .col-count.warn{background:#fee2e2;color:#991b1b;}
-.col-desc{font-size:10px;color:#64748b;}
-.dom-row td{background:#1a1f2e;color:#64748b;padding:5px 10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;border:1px solid rgba(255,255,255,0.05);}
-.bh-td{padding:8px 10px;border:1px solid #e2e8f0;background:white;font-size:11px;font-weight:500;color:#1e293b;white-space:nowrap;vertical-align:top;}
-/* Cel-classes met prefix 'cx-' om conflict met HTML col-attribuut te vermijden */
-.cx-cell{padding:5px 6px;border:1px solid #e2e8f0;vertical-align:top;min-height:64px;min-width:160px;}
+.col-desc{font-size:11px;color:#64748b;}
+.dom-row td{background:#1a1f2e;color:#64748b;padding:6px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;border:1px solid rgba(255,255,255,0.05);}
+.bh-td{padding:10px 12px;border:1px solid #e2e8f0;background:white;font-size:12px;font-weight:500;color:#1e293b;white-space:nowrap;vertical-align:top;}
+.cx-cell{padding:6px 7px;border:1px solid #e2e8f0;vertical-align:top;min-height:72px;}
 .cx-s{background:#f8fafc;border-top:2px solid #94a3b8;}
 .cx-a{background:#eff6ff;border-top:2px solid #3b82f6;}
 .cx-f{background:#fef2f2;border-top:2px solid #ef4444;}
 .cx-w{background:#fffbeb;border-top:2px solid #f59e0b;}
 .cx-b{background:#f5f3ff;border-top:2px solid #8b5cf6;}
 .cx-g{background:#f0fdf4;border-top:2px solid #22c55e;}
-.empty-cell{height:36px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#cbd5e1;font-style:italic;}
-.add-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:4px;padding:4px 0;font-size:10px;color:#94a3b8;background:transparent;border:1px dashed #e2e8f0;border-radius:5px;cursor:pointer;margin-top:3px;}
+.empty-cell{height:40px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#cbd5e1;font-style:italic;}
+.add-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:4px;padding:5px 0;font-size:11px;color:#94a3b8;background:transparent;border:1px dashed #e2e8f0;border-radius:5px;cursor:pointer;margin-top:4px;}
 .add-btn:hover{border-color:#818cf8;color:#4338ca;background:#fafaff;}
-.new-card-form{background:white;border:1px solid #818cf8;border-radius:6px;padding:7px 8px;margin-bottom:4px;}
-.new-card-input{width:100%;border:none;outline:none;font-size:11px;color:#1e293b;background:transparent;resize:none;font-family:system-ui,sans-serif;line-height:1.4;}
-.new-card-actions{display:flex;gap:5px;margin-top:6px;}
-.nca-ok{padding:3px 10px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;border:none;background:#4338ca;color:white;}
-.nca-cancel{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;}
-.legend{display:flex;flex-wrap:wrap;gap:8px;padding:8px 14px;border-top:1px solid #e2e8f0;background:white;flex-shrink:0;}
-.leg{display:flex;align-items:center;gap:5px;font-size:10px;color:#64748b;}
-.ldot{width:8px;height:8px;border-radius:50%;}
-.lbar{width:16px;height:5px;border-radius:2px;}
-.kcard{background:white;border:1px solid #e2e8f0;border-radius:6px;padding:7px 8px;margin-bottom:4px;cursor:pointer;}
+.new-card-form{background:white;border:1px solid #818cf8;border-radius:6px;padding:8px 10px;margin-bottom:4px;}
+.new-card-input{width:100%;border:none;outline:none;font-size:12px;color:#1e293b;background:transparent;resize:none;font-family:system-ui,sans-serif;line-height:1.4;}
+.new-card-actions{display:flex;gap:6px;margin-top:7px;}
+.nca-ok{padding:4px 12px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:#4338ca;color:white;}
+.nca-cancel{padding:4px 10px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#64748b;}
+.legend{display:flex;flex-wrap:wrap;gap:10px;padding:10px 16px;border-top:1px solid #e2e8f0;background:white;flex-shrink:0;}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:#64748b;}
+.ldot{width:9px;height:9px;border-radius:50%;}
+.lbar{width:18px;height:5px;border-radius:2px;}
+.kcard{background:white;border:1px solid #e2e8f0;border-radius:7px;padding:9px 10px;margin-bottom:5px;cursor:pointer;}
 .kcard:hover{border-color:#818cf8;background:#fafaff;}
-.kcard-labels{display:flex;gap:3px;margin-bottom:4px;}
+.kcard-labels{display:flex;gap:3px;margin-bottom:5px;}
 .lb{height:3px;flex:1;border-radius:2px;}
 .lb.r{background:#ef4444;}.lb.b{background:#3b82f6;}.lb.g{background:#22c55e;}.lb.y{background:#f59e0b;}
-.kcard-title{font-size:11px;font-weight:500;color:#1e293b;line-height:1.35;margin-bottom:5px;}
-.kcard-footer{display:flex;align-items:center;gap:5px;flex-wrap:wrap;border-top:1px solid #f1f5f9;padding-top:4px;}
-.ks{display:flex;align-items:center;gap:3px;font-size:10px;color:#94a3b8;}
-.ab{display:inline-flex;font-size:9px;padding:1px 5px;border-radius:3px;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;}
-.cb{display:inline-flex;font-size:9px;padding:1px 5px;border-radius:3px;background:#fef3c7;color:#92400e;border:1px solid #fbbf24;}
-.tg{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:500;}
+.kcard-title{font-size:12px;font-weight:500;color:#1e293b;line-height:1.35;margin-bottom:6px;}
+.kcard-footer{display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-top:1px solid #f1f5f9;padding-top:5px;}
+.ks{display:flex;align-items:center;gap:3px;font-size:11px;color:#94a3b8;}
+.ab{display:inline-flex;font-size:10px;padding:2px 6px;border-radius:3px;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;}
+.cb{display:inline-flex;font-size:10px;padding:2px 6px;border-radius:3px;background:#fef3c7;color:#92400e;border:1px solid #fbbf24;}
+.tg{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:500;}
 .tg.bbv{background:#ede9fe;color:#5b21b6;}.tg.str{background:#d1fae5;color:#065f46;}
 .tg.piek{background:#fee2e2;color:#991b1b;}.tg.vol{background:#e0f2fe;color:#075985;}
-.mb{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#4338ca;color:white;font-size:8px;font-weight:600;}
-.logdot{width:6px;height:6px;border-radius:50%;background:#f59e0b;}
-.drawer{position:absolute;top:0;right:0;width:360px;height:100%;background:white;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;z-index:30;transform:translateX(100%);transition:transform 0.18s ease;}
+.mb{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#4338ca;color:white;font-size:9px;font-weight:600;}
+.logdot{width:7px;height:7px;border-radius:50%;background:#f59e0b;}
+.drawer{position:absolute;top:0;right:0;width:400px;height:100%;background:white;border-left:1px solid #e2e8f0;display:flex;flex-direction:column;z-index:30;transform:translateX(100%);transition:transform 0.18s ease;}
 .drawer.open{transform:translateX(0);}
-.dp-head{padding:14px 16px 12px;border-bottom:1px solid #e2e8f0;background:#f8fafc;position:relative;}
-.dp-domain{font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
-.dp-title{font-size:15px;font-weight:600;color:#1e293b;line-height:1.3;padding-right:28px;margin-bottom:6px;}
-.dp-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.dp-close{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:18px;padding:2px 6px;border-radius:4px;}
+.dp-head{padding:18px 20px 14px;border-bottom:1px solid #e2e8f0;background:#f8fafc;position:relative;}
+.dp-domain{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.dp-title{font-size:17px;font-weight:600;color:#1e293b;line-height:1.3;padding-right:30px;margin-bottom:8px;}
+.dp-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dp-close{position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px;padding:2px 6px;border-radius:4px;}
 .dp-close:hover{background:#f1f5f9;color:#1e293b;}
-.export-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#4338ca;}
+.export-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #e2e8f0;background:white;color:#4338ca;}
 .export-btn:hover{background:#eef2ff;border-color:#c7d2fe;}
-.dp-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:14px;}
-.dp-sec{font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:7px;}
-.pill{display:inline-flex;align-items:center;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;margin-right:5px;margin-bottom:5px;}
+.dp-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:16px;}
+.dp-sec{font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}
+.pill{display:inline-flex;align-items:center;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid;margin-right:6px;margin-bottom:6px;}
 .pill.bbv{background:#ede9fe;color:#5b21b6;border-color:#c4b5fd;}
 .pill.piek{background:#fee2e2;color:#991b1b;border-color:#fca5a5;}
 .pill.str{background:#d1fae5;color:#065f46;border-color:#6ee7b7;}
 .pill.vol{background:#e0f2fe;color:#075985;border-color:#7dd3fc;}
-.dp-link{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:6px;cursor:pointer;}
+.dp-link{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid #e2e8f0;border-radius:9px;margin-bottom:7px;cursor:pointer;}
 .dp-link:hover{border-color:#818cf8;background:#fafaff;}
-.dp-link-ico{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
+.dp-link-ico{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
 .dp-link-ico.ind{background:#eef2ff;}.dp-link-ico.sl{background:#f1f5f9;}
-.dp-link-name{font-size:12px;font-weight:500;color:#1e293b;}
-.dp-link-sub{font-size:10px;color:#64748b;font-family:monospace;}
-.kladblok{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;font-size:12px;color:#78350f;line-height:1.6;white-space:pre-line;}
-.besluitlog{border-left:4px solid #1e293b;padding:10px 12px;background:#f8fafc;font-size:12px;color:#1e293b;line-height:1.6;white-space:pre-line;}
-.prog-bar{height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden;margin-bottom:8px;}
-.prog-fill{height:100%;background:#4338ca;border-radius:2px;}
-.chk-row{display:flex;align-items:flex-start;gap:8px;padding:3px 0;font-size:12px;color:#1e293b;}
-.chk-box{width:15px;height:15px;border-radius:3px;border:1px solid #cbd5e1;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;}
+.dp-link-name{font-size:13px;font-weight:500;color:#1e293b;}
+.dp-link-sub{font-size:11px;color:#64748b;font-family:monospace;}
+.kladblok{background:#fefce8;border:1px solid #fde68a;border-radius:9px;padding:14px 16px;font-size:13px;color:#78350f;line-height:1.6;white-space:pre-line;}
+.besluitlog{border-left:4px solid #1e293b;padding:12px 14px;background:#f8fafc;font-size:13px;color:#1e293b;line-height:1.6;white-space:pre-line;}
+.prog-bar{height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden;margin-bottom:10px;}
+.prog-fill{height:100%;background:#4338ca;border-radius:3px;}
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:4px 0;font-size:13px;color:#1e293b;}
+.chk-box{width:17px;height:17px;border-radius:4px;border:1px solid #cbd5e1;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;}
 .chk-box.done{background:#4338ca;border-color:#4338ca;color:white;}
 .chk-done{color:#94a3b8;text-decoration:line-through;}
-.pitch-wrap{padding:18px;display:flex;flex-direction:column;gap:14px;}
-.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.p-col{padding:14px;background:white;border:1px solid #e2e8f0;border-radius:8px;}
-.p-col.old{border-left:3px solid #ef4444;}.p-col.nw{border-left:3px solid #10b981;}
-.p-col-title{font-size:12px;font-weight:600;margin-bottom:10px;}
+.pitch-wrap{padding:24px;display:flex;flex-direction:column;gap:18px;}
+.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.p-col{padding:18px;background:white;border:1px solid #e2e8f0;border-radius:10px;}
+.p-col.old{border-left:4px solid #ef4444;}.p-col.nw{border-left:4px solid #10b981;}
+.p-col-title{font-size:13px;font-weight:600;margin-bottom:12px;}
 .p-col.old .p-col-title{color:#991b1b;}.p-col.nw .p-col-title{color:#065f46;}
-.p-item{display:flex;gap:7px;margin-bottom:6px;font-size:11px;color:#64748b;line-height:1.4;}
-.p-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:4px;}
-.erg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.erg-col{background:#f8fafc;border-radius:8px;padding:10px;}
-.erg-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
-.erg-txt{font-size:11px;color:#1e293b;line-height:1.45;}
+.p-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px;color:#64748b;line-height:1.5;}
+.p-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.erg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.erg-col{background:#f8fafc;border-radius:9px;padding:14px;}
+.erg-lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
+.erg-txt{font-size:12px;color:#1e293b;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -222,8 +223,6 @@ table{border-collapse:collapse;font-size:11px;}
   </nav>
 
   <div class="main" id="main">
-
-    <!-- RITUEEL OVERLAY -->
     <div class="overlay" id="overlay-ritual">
       <div class="ritual-modal">
         <div class="ritual-head">
@@ -245,7 +244,6 @@ table{border-collapse:collapse;font-size:11px;}
       </div>
     </div>
 
-    <!-- EXPORT OVERLAY -->
     <div class="overlay" id="overlay-export">
       <div class="export-modal">
         <div class="export-head">
@@ -263,7 +261,6 @@ table{border-collapse:collapse;font-size:11px;}
       </div>
     </div>
 
-    <!-- FOCUS PANEL -->
     <div class="panel" id="panel-focus">
       <div class="focus-wrap">
         <div><div class="focus-hdr">Maandagochtend Focus</div><div class="focus-sub">Waar zijn we gebleven? Wat heeft prio? Wat ligt bij anderen?</div></div>
@@ -289,10 +286,9 @@ table{border-collapse:collapse;font-size:11px;}
       </div>
     </div>
 
-    <!-- MATRIX PANEL -->
     <div class="panel active" id="panel-matrix">
       <div class="search-wrap">
-        <span style="font-size:13px;color:#94a3b8;">&#128269;</span>
+        <span style="font-size:15px;color:#94a3b8;">&#128269;</span>
         <input class="search-input" id="search-input" placeholder="Zoek op dossier, tag of budgethouder..." oninput="doSearch(this.value)" onblur="setTimeout(closeSearch,160)">
         <span class="search-hint" id="search-hint"></span>
         <div class="search-results" id="search-results"></div>
@@ -314,11 +310,11 @@ table{border-collapse:collapse;font-size:11px;}
         </table>
       </div>
       <div class="legend">
-        <div class="leg"><span class="avg open" style="font-size:8px;">OPENBAAR</span></div>
-        <div class="leg"><span class="avg intern" style="font-size:8px;">INTERN</span></div>
-        <div class="leg"><span class="avg conf" style="font-size:8px;">VERTROUWELIJK</span></div>
-        <div class="leg"><span class="avg sec" style="font-size:8px;">GEHEIM</span></div>
-        <div class="leg" style="margin-left:6px;"><div class="ldot" style="background:#4338ca"></div>Mail</div>
+        <div class="leg"><span class="avg open">OPENBAAR</span></div>
+        <div class="leg"><span class="avg intern">INTERN</span></div>
+        <div class="leg"><span class="avg conf">VERTROUWELIJK</span></div>
+        <div class="leg"><span class="avg sec">GEHEIM</span></div>
+        <div class="leg" style="margin-left:8px;"><div class="ldot" style="background:#4338ca"></div>Mail</div>
         <div class="leg"><div class="ldot" style="background:#f59e0b"></div>Besluitlog</div>
         <div class="leg"><div class="ldot" style="background:#ef4444"></div>Deadline</div>
         <div class="leg"><div class="lbar" style="background:#ef4444"></div>P&C</div>
@@ -328,7 +324,6 @@ table{border-collapse:collapse;font-size:11px;}
       </div>
     </div>
 
-    <!-- PITCH PANEL -->
     <div class="panel" id="panel-pitch">
       <div class="pitch-wrap">
         <div><div class="focus-hdr">Doolhof vs Cockpit</div><div class="focus-sub">Business case voor Team I&amp;A</div></div>
@@ -350,8 +345,8 @@ table{border-collapse:collapse;font-size:11px;}
             <div class="p-item"><div class="p-dot" style="background:#6ee7b7"></div>Evergreen-tag: info vloeit door naar volgende P&C cyclus</div>
           </div>
         </div>
-        <div style="background:white;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
-          <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:10px;">Cognitieve ergonomie</div>
+        <div style="background:white;border:1px solid #e2e8f0;border-radius:10px;padding:18px;">
+          <div style="font-size:14px;font-weight:600;color:#1e293b;margin-bottom:12px;">Cognitieve ergonomie</div>
           <div class="erg-grid">
             <div class="erg-col"><div class="erg-lbl">Maandagochtend</div><div class="erg-txt">Scan Focus-kolom. Geen inbox. Direct prioriteit zien.</div></div>
             <div class="erg-col"><div class="erg-lbl">Strateeg-check</div><div class="erg-txt">Capaciteitsbalk beslist direct of instroom haalbaar is.</div></div>
@@ -361,7 +356,6 @@ table{border-collapse:collapse;font-size:11px;}
       </div>
     </div>
 
-    <!-- DRAWER -->
     <div class="drawer" id="drawer">
       <div class="dp-head">
         <div class="dp-domain" id="dp-domain"></div>
@@ -371,96 +365,47 @@ table{border-collapse:collapse;font-size:11px;}
       </div>
       <div class="dp-body" id="dp-body"></div>
     </div>
-
   </div>
 </div>
 
 <script>
 var DOMAINS=[
   {name:'Sociaal Domein',rows:[
-    {bh:'Jeugd & Gezin',    cells:{f:'jeugd'}},
-    {bh:'Wmo & Zorg',       cells:{g:'welzijn'}},
-    {bh:'Participatiewet',  cells:{}},
-    {bh:'Onderwijs',        cells:{}}
+    {bh:'Jeugd & Gezin',cells:{f:'jeugd'}},
+    {bh:'Wmo & Zorg',cells:{g:'welzijn'}},
+    {bh:'Participatiewet',cells:{}},
+    {bh:'Onderwijs',cells:{}}
   ]},
   {name:'Bedrijfsvoering',rows:[
-    {bh:'HRM & Organisatie',      cells:{w:'formatie'}},
-    {bh:'I&A / Informatisering',  cells:{a:'ia'}},
-    {bh:'Financiën & Control',    cells:{a:'vjn'}},
-    {bh:'Facilitair & Inkoop',    cells:{}}
+    {bh:'HRM & Organisatie',cells:{w:'formatie'}},
+    {bh:'I&A / Informatisering',cells:{a:'ia'}},
+    {bh:'Financiën & Control',cells:{a:'vjn'}},
+    {bh:'Facilitair & Inkoop',cells:{}}
   ]},
   {name:'Ruimtelijke Ordening',rows:[
-    {bh:'Infrastructuur',  cells:{}},
-    {bh:'Groen & Spelen',  cells:{}},
-    {bh:'Vastgoed',        cells:{b:'vastgoed'}},
-    {bh:'Grote Projecten', cells:{s:'parkeren'}}
+    {bh:'Infrastructuur',cells:{}},
+    {bh:'Groen & Spelen',cells:{}},
+    {bh:'Vastgoed',cells:{b:'vastgoed'}},
+    {bh:'Grote Projecten',cells:{s:'parkeren'}}
   ]}
 ];
-
 var COLS=['s','a','f','w','b','g'];
 var extraCards={};
 var activeForm=null;
 var currentCardId=null;
 var currentMd='';
 var currentFn='';
-
 var CARDS={
-  jeugd:{domain:'Sociaal Domein · Jeugd & Gezin',title:'Dekking zoeken tekort Jeugdzorg 2026',avg:'conf',avgLabel:'VERTROUWELIJK',
-    tags:[{cls:'bbv',label:'#BBV-verplichting'},{cls:'piek',label:'#Piekbelasting'}],
-    links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/Jeugd/VJN2026/',mail:false},{ico:'ind',name:'Teams: Kanaal Zorgtekorten',sub:'teams.microsoft.com/jeugd-zorgtekorten',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Jeugdzorg 2026',mail:true}],
-    kladblok:'- Sjaak (Beheer) wil format X, Marieke (Sociaal) levert format Y.\n- Verschillenanalyse LIAS vs Kadernota: +200k.\n- Reserve sociaal domein bijna leeg — alternatief zoeken in algemene middelen?',
-    log:'12/03: Afspraak met wethouder gemaakt voor a.s. vrijdag.\n10/03: MT akkoord met eerste doorrekening.',
-    checks:[{t:'Cijfers uitdraaien uit LIAS',done:true},{t:'Verschillenanalyse t.o.v. Kadernota',done:true},{t:'Format Marieke ombouwen naar format Sjaak',done:false},{t:'Concept sturen naar Senior voor check',done:false}],
-    cyclus:'Gekoppeld aan: Kadernota 2025 (T-1)',labels:'r b',
-    footer:'<span class="tg bbv">BBV</span><span class="tg piek">Piekbelasting</span><span class="ab">Vr 28/3</span><span class="mb">3</span><span class="logdot"></span><span class="avg conf">VERTROUWELIJK</span>'},
-  welzijn:{domain:'Sociaal Domein · Wmo & Zorg',title:'Subsidiebeschikking Welzijn controleren',avg:'intern',avgLabel:'INTERN',
-    tags:[{cls:'vol',label:'#Volgende_Cyclus'}],
-    links:[{ico:'ind',name:'DMS: Getekende beschikking',sub:'file:///S:/Dossiers/Welzijn/Beschikking2026.pdf',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Welzijn Subsidies',mail:true}],
-    kladblok:'Rechtmatigheid is gecheckt. Budgetuitputting nog controleren.',
-    log:'28/02: Definitief akkoord getekend door wethouder.',
-    checks:[{t:'Check rechtmatigheid',done:false},{t:'Check budgetuitputting',done:false}],
-    cyclus:'Vloeit door naar: Jaarrekening 2026',labels:'g',
-    footer:'<span class="tg vol">Volgende cyclus</span><span class="cb">&#8594; Jaarrekening</span><span class="logdot"></span><span class="avg intern">INTERN</span>'},
-  formatie:{domain:'Bedrijfsvoering · HRM & Organisatie',title:'Formatie-uren doorrekenen reorganisatie',avg:'sec',avgLabel:'GEHEIM',
-    tags:[{cls:'bbv',label:'#BBV-verplichting'}],
-    links:[{ico:'ind',name:'Visma Export Map',sub:'file:///P:/HRM/Visma/Export2026/',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Reorganisatie HR',mail:true}],
-    kladblok:'Wacht op definitieve uitdraai van HR (Visma). Pas na ontvangst kan ik de loonsommen indexeren.',
-    log:'01/03: HR levert data uiterlijk week 14 aan.',
-    checks:[{t:'Aanvraag data bij HR',done:true},{t:'Bestand opschonen',done:false},{t:'Doorrekening maken incl. cao-stijging',done:false}],
-    cyclus:'',labels:'g y',
-    footer:'<span class="ks">&#10003; 1/3</span><span class="mb">1</span><span class="logdot"></span><span class="avg sec">GEHEIM</span>'},
-  ia:{domain:'Bedrijfsvoering · I&A / Informatisering',title:'Analyse nieuwe software licenties',avg:'intern',avgLabel:'INTERN',
-    tags:[{cls:'str',label:'#Strategisch_Advies'}],
-    links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: I&A Licenties',mail:true}],
-    kladblok:'I&A manager vraagt business case Microsoft E5 vs E3. Schatting: ±8u werk.',
-    log:'Nog geen besluit. Wacht op capaciteits-check.',
-    checks:[],cyclus:'',labels:'g',
-    footer:'<span class="tg str">Strategisch</span><span class="mb">1</span><span class="avg intern">INTERN</span>'},
-  vjn:{domain:'Bedrijfsvoering · Financiën & Control',title:'Voorjaarsnota: teksten Bedrijfsvoering reviewen',avg:'intern',avgLabel:'INTERN',
-    tags:[{cls:'bbv',label:'#BBV-verplichting'}],
-    links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/VJN2026/Bedrijfsvoering/',mail:false}],
-    kladblok:'Kijken of de aannames voor inflatie kloppen met de concernrichtlijn.',
-    log:'Nog geen besluit.',
-    checks:[{t:'Richtlijn erbij pakken',done:false},{t:'Teksten scannen op afwijkingen',done:false}],
-    cyclus:'',labels:'r',
-    footer:'<span class="tg bbv">BBV</span><span class="ks">&#10003; 0/2</span><span class="avg intern">INTERN</span>'},
-  vastgoed:{domain:'Ruimtelijke Ordening · Vastgoed',title:'Reservepositie — vraag wethouder',avg:'conf',avgLabel:'VERTROUWELIJK',
-    tags:[{cls:'str',label:'#Strategisch_Advies'}],
-    links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Vastgoed Reserves',mail:true}],
-    kladblok:'Huidige stand reserves vastgoed in kaart brengen tbv verkoop oude school.',
-    log:'',checks:[],cyclus:'',labels:'b',
-    footer:'<span class="tg str">Strategisch</span><span class="ab">Di 1/4</span><span class="mb">4</span><span class="avg conf">VERTROUWELIJK</span>'},
-  parkeren:{domain:'Ruimtelijke Ordening · Grote Projecten',title:'Reservepositie parkeren — vraag wethouder',avg:'open',avgLabel:'OPENBAAR',
-    tags:[],
-    links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Parkeren RO',mail:true}],
-    kladblok:'Binnengekomen via de mail. Nog geen actie ondernemen — eerst parkeren.',
-    log:'',checks:[],cyclus:'',labels:'b',
-    footer:'<span style="font-size:10px;color:#94a3b8;">Geparkeerd</span><span class="avg open">OPENBAAR</span>'}
+  jeugd:{domain:'Sociaal Domein · Jeugd & Gezin',title:'Dekking zoeken tekort Jeugdzorg 2026',avg:'conf',avgLabel:'VERTROUWELIJK',tags:[{cls:'bbv',label:'#BBV-verplichting'},{cls:'piek',label:'#Piekbelasting'}],links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/Jeugd/VJN2026/',mail:false},{ico:'ind',name:'Teams: Kanaal Zorgtekorten',sub:'teams.microsoft.com/jeugd-zorgtekorten',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Jeugdzorg 2026',mail:true}],kladblok:'- Sjaak (Beheer) wil format X, Marieke (Sociaal) levert format Y.\n- Verschillenanalyse LIAS vs Kadernota: +200k.\n- Reserve sociaal domein bijna leeg — alternatief zoeken in algemene middelen?',log:'12/03: Afspraak met wethouder gemaakt voor a.s. vrijdag.\n10/03: MT akkoord met eerste doorrekening.',checks:[{t:'Cijfers uitdraaien uit LIAS',done:true},{t:'Verschillenanalyse t.o.v. Kadernota',done:true},{t:'Format Marieke ombouwen naar format Sjaak',done:false},{t:'Concept sturen naar Senior voor check',done:false}],cyclus:'Gekoppeld aan: Kadernota 2025 (T-1)',labels:'r b',footer:'<span class="tg bbv">BBV</span><span class="tg piek">Piekbelasting</span><span class="ab">Vr 28/3</span><span class="mb">3</span><span class="logdot"></span><span class="avg conf">VERTROUWELIJK</span>'},
+  welzijn:{domain:'Sociaal Domein · Wmo & Zorg',title:'Subsidiebeschikking Welzijn controleren',avg:'intern',avgLabel:'INTERN',tags:[{cls:'vol',label:'#Volgende_Cyclus'}],links:[{ico:'ind',name:'DMS: Getekende beschikking',sub:'file:///S:/Dossiers/Welzijn/Beschikking2026.pdf',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Welzijn Subsidies',mail:true}],kladblok:'Rechtmatigheid is gecheckt. Budgetuitputting nog controleren.',log:'28/02: Definitief akkoord getekend door wethouder.',checks:[{t:'Check rechtmatigheid',done:false},{t:'Check budgetuitputting',done:false}],cyclus:'Vloeit door naar: Jaarrekening 2026',labels:'g',footer:'<span class="tg vol">Volgende cyclus</span><span class="cb">&#8594; Jaarrekening</span><span class="logdot"></span><span class="avg intern">INTERN</span>'},
+  formatie:{domain:'Bedrijfsvoering · HRM & Organisatie',title:'Formatie-uren doorrekenen reorganisatie',avg:'sec',avgLabel:'GEHEIM',tags:[{cls:'bbv',label:'#BBV-verplichting'}],links:[{ico:'ind',name:'Visma Export Map',sub:'file:///P:/HRM/Visma/Export2026/',mail:false},{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Reorganisatie HR',mail:true}],kladblok:'Wacht op definitieve uitdraai van HR (Visma). Pas na ontvangst kan ik de loonsommen indexeren.',log:'01/03: HR levert data uiterlijk week 14 aan.',checks:[{t:'Aanvraag data bij HR',done:true},{t:'Bestand opschonen',done:false},{t:'Doorrekening maken incl. cao-stijging',done:false}],cyclus:'',labels:'g y',footer:'<span class="ks">&#10003; 1/3</span><span class="mb">1</span><span class="logdot"></span><span class="avg sec">GEHEIM</span>'},
+  ia:{domain:'Bedrijfsvoering · I&A / Informatisering',title:'Analyse nieuwe software licenties',avg:'intern',avgLabel:'INTERN',tags:[{cls:'str',label:'#Strategisch_Advies'}],links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: I&A Licenties',mail:true}],kladblok:'I&A manager vraagt business case Microsoft E5 vs E3. Schatting: ±8u werk.',log:'Nog geen besluit. Wacht op capaciteits-check.',checks:[],cyclus:'',labels:'g',footer:'<span class="tg str">Strategisch</span><span class="mb">1</span><span class="avg intern">INTERN</span>'},
+  vjn:{domain:'Bedrijfsvoering · Financiën & Control',title:'Voorjaarsnota: teksten Bedrijfsvoering reviewen',avg:'intern',avgLabel:'INTERN',tags:[{cls:'bbv',label:'#BBV-verplichting'}],links:[{ico:'ind',name:'T-Schijf: Werkmap Voorjaarsnota',sub:'file:///P:/FinAdv/VJN2026/Bedrijfsvoering/',mail:false}],kladblok:'Kijken of de aannames voor inflatie kloppen met de concernrichtlijn.',log:'Nog geen besluit.',checks:[{t:'Richtlijn erbij pakken',done:false},{t:'Teksten scannen op afwijkingen',done:false}],cyclus:'',labels:'r',footer:'<span class="tg bbv">BBV</span><span class="ks">&#10003; 0/2</span><span class="avg intern">INTERN</span>'},
+  vastgoed:{domain:'Ruimtelijke Ordening · Vastgoed',title:'Reservepositie — vraag wethouder',avg:'conf',avgLabel:'VERTROUWELIJK',tags:[{cls:'str',label:'#Strategisch_Advies'}],links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Vastgoed Reserves',mail:true}],kladblok:'Huidige stand reserves vastgoed in kaart brengen tbv verkoop oude school.',log:'',checks:[],cyclus:'',labels:'b',footer:'<span class="tg str">Strategisch</span><span class="ab">Di 1/4</span><span class="mb">4</span><span class="avg conf">VERTROUWELIJK</span>'},
+  parkeren:{domain:'Ruimtelijke Ordening · Grote Projecten',title:'Reservepositie parkeren — vraag wethouder',avg:'open',avgLabel:'OPENBAAR',tags:[],links:[{ico:'sl',name:'Mail-Context (Outlook Sync)',sub:'Outlook → map: Parkeren RO',mail:true}],kladblok:'Binnengekomen via de mail. Nog geen actie ondernemen — eerst parkeren.',log:'',checks:[],cyclus:'',labels:'b',footer:'<span style="font-size:11px;color:#94a3b8;">Geparkeerd</span><span class="avg open">OPENBAAR</span>'}
 };
-
 function renderMatrix(){
-  var tbody=document.getElementById('matrix-body');
-  if(!tbody)return;
+  var tbody=document.getElementById('matrix-body');if(!tbody)return;
   var html='';
   for(var d=0;d<DOMAINS.length;d++){
     var dom=DOMAINS[d];
@@ -469,34 +414,23 @@ function renderMatrix(){
       var row=dom.rows[r];
       html+='<tr><td class="bh-td">'+row.bh+'</td>';
       for(var ci=0;ci<COLS.length;ci++){
-        var colKey=COLS[ci];
-        var cardId=row.cells[colKey]||null;
-        var mapKey=row.bh+'|'+colKey;
-        var extras=extraCards[mapKey]||[];
-        /* gebruik cx- prefix zodat class nooit botst met HTML-attribuut */
-        html+='<td class="cx-cell cx-'+colKey+'">';
+        var ck=COLS[ci],cardId=row.cells[ck]||null,mk=row.bh+'|'+ck,extras=extraCards[mk]||[];
+        html+='<td class="cx-cell cx-'+ck+'">';
         if(cardId){
-          var c=CARDS[cardId];
-          var op=(cardId==='parkeren')?' style="opacity:0.7;"':'';
+          var c=CARDS[cardId],op=(cardId==='parkeren')?' style="opacity:0.7;"':'';
           html+='<div class="kcard"'+op+' onclick="openCard(\''+cardId+'\')">';
           html+='<div class="kcard-labels">';
           var lbls=c.labels.split(' ');
           for(var li=0;li<lbls.length;li++){if(lbls[li])html+='<div class="lb '+lbls[li]+'"></div>';}
-          html+='</div>';
-          html+='<div class="kcard-title">'+c.title+'</div>';
-          html+='<div class="kcard-footer">'+c.footer+'</div>';
-          html+='</div>';
+          html+='</div><div class="kcard-title">'+c.title+'</div><div class="kcard-footer">'+c.footer+'</div></div>';
         }
         for(var ei=0;ei<extras.length;ei++){
-          html+='<div class="kcard" onclick="openNewCard(\''+mapKey+'\','+ei+')">';
+          html+='<div class="kcard" onclick="openNewCard(\''+mk+'\','+ei+')">';
           html+='<div class="kcard-title">'+extras[ei].title+'</div>';
-          html+='<div class="kcard-footer"><span style="font-size:10px;color:#94a3b8;">Nieuw dossier</span><span class="avg intern">INTERN</span></div>';
-          html+='</div>';
+          html+='<div class="kcard-footer"><span style="font-size:11px;color:#94a3b8;">Nieuw dossier</span><span class="avg intern">INTERN</span></div></div>';
         }
-        if(!cardId&&extras.length===0){
-          html+='<div class="empty-cell">geen actieve dossiers</div>';
-        }
-        html+='<button class="add-btn" onclick="showAddForm(event,\''+row.bh+'\',\''+colKey+'\')">+ nieuw dossier</button>';
+        if(!cardId&&extras.length===0){html+='<div class="empty-cell">geen actieve dossiers</div>';}
+        html+='<button class="add-btn" onclick="showAddForm(event,\''+row.bh+'\',\''+ck+'\')">+ nieuw dossier</button>';
         html+='</td>';
       }
       html+='</tr>';
@@ -504,39 +438,24 @@ function renderMatrix(){
   }
   tbody.innerHTML=html;
 }
-
 function showAddForm(e,bh,col){
   e.stopPropagation();
   if(activeForm){activeForm.parentNode.removeChild(activeForm);activeForm=null;}
-  var btn=e.currentTarget||e.target;
-  var cell=btn.parentNode;
-  var form=document.createElement('div');
-  form.className='new-card-form';
-  form.innerHTML='<textarea class="new-card-input" placeholder="Titel van het dossier..." rows="2" id="new-input"></textarea>'
-    +'<div class="new-card-actions">'
-    +'<button class="nca-ok" onclick="saveNewCard(\''+bh+'\',\''+col+'\')">Toevoegen</button>'
-    +'<button class="nca-cancel" onclick="cancelNewCard()">Annuleer</button>'
-    +'</div>';
-  cell.insertBefore(form,btn);
-  activeForm=form;
+  var btn=e.currentTarget||e.target,cell=btn.parentNode;
+  var form=document.createElement('div');form.className='new-card-form';
+  form.innerHTML='<textarea class="new-card-input" placeholder="Titel van het dossier..." rows="2" id="new-input"></textarea><div class="new-card-actions"><button class="nca-ok" onclick="saveNewCard(\''+bh+'\',\''+col+'\')">Toevoegen</button><button class="nca-cancel" onclick="cancelNewCard()">Annuleer</button></div>';
+  cell.insertBefore(form,btn);activeForm=form;
   setTimeout(function(){var i=document.getElementById('new-input');if(i)i.focus();},50);
 }
 function saveNewCard(bh,col){
-  var inp=document.getElementById('new-input');
-  if(!inp)return;
-  var title=inp.value.trim();
-  if(!title){cancelNewCard();return;}
-  var key=bh+'|'+col;
-  if(!extraCards[key])extraCards[key]=[];
-  extraCards[key].push({title:title});
-  activeForm=null;
-  renderMatrix();
+  var inp=document.getElementById('new-input');if(!inp)return;
+  var title=inp.value.trim();if(!title){cancelNewCard();return;}
+  var key=bh+'|'+col;if(!extraCards[key])extraCards[key]=[];
+  extraCards[key].push({title:title});activeForm=null;renderMatrix();
 }
 function cancelNewCard(){if(activeForm){activeForm.parentNode.removeChild(activeForm);activeForm=null;}}
 function openNewCard(key,idx){
-  var parts=key.split('|');
-  var card=(extraCards[key]||[])[idx];
-  if(!card)return;
+  var parts=key.split('|'),card=(extraCards[key]||[])[idx];if(!card)return;
   currentCardId=null;
   document.getElementById('dp-domain').textContent=parts[0]+' · nieuw dossier';
   document.getElementById('dp-title').textContent=card.title;
@@ -544,13 +463,10 @@ function openNewCard(key,idx){
   document.getElementById('dp-body').innerHTML='<div><div class="dp-sec">Conceptueel kladblok</div><div class="kladblok">Nog geen notities.</div></div><div><div class="dp-sec">Besluitvormings-log</div><div class="besluitlog">Nog geen besluiten vastgelegd.</div></div>';
   document.getElementById('drawer').className='drawer open';
 }
-
 function doSearch(q){
-  var res=document.getElementById('search-results');
-  var hint=document.getElementById('search-hint');
+  var res=document.getElementById('search-results'),hint=document.getElementById('search-hint');
   if(!q||q.length<2){res.className='search-results';hint.textContent='';return;}
-  var ql=q.toLowerCase();
-  var hits=[];
+  var ql=q.toLowerCase(),hits=[];
   for(var id in CARDS){
     var c=CARDS[id],score=0;
     if(c.title.toLowerCase().indexOf(ql)>=0)score+=3;
@@ -566,27 +482,19 @@ function doSearch(q){
     var h=hits[i],tgs='';
     for(var ti=0;ti<h.c.tags.length;ti++){tgs+='<span class="tg '+h.c.tags[ti].cls+'" style="margin-right:3px;">'+h.c.tags[ti].label+'</span>';}
     html+='<div class="sr-item" onclick="openCard(\''+h.id+'\');closeSearch();">';
-    html+='<div class="sr-title">'+h.c.title+'</div>';
-    html+='<div class="sr-meta">'+h.c.domain+' &nbsp;'+tgs+'<span class="avg '+h.c.avg+'" style="font-size:8px;margin-left:4px;">'+h.c.avgLabel+'</span></div>';
-    html+='</div>';
+    html+='<div class="sr-title">'+h.c.title+'</div><div class="sr-meta">'+h.c.domain+' &nbsp;'+tgs+'<span class="avg '+h.c.avg+'" style="margin-left:4px;">'+h.c.avgLabel+'</span></div></div>';
   }
-  res.innerHTML=html;
-  res.className='search-results open';
+  res.innerHTML=html;res.className='search-results open';
   hint.textContent=hits.length+' resultaat'+(hits.length>1?'en':'');
 }
-function closeSearch(){
-  document.getElementById('search-results').className='search-results';
-  document.getElementById('search-hint').textContent='';
-}
-
+function closeSearch(){document.getElementById('search-results').className='search-results';document.getElementById('search-hint').textContent='';}
 function openCard(id){
   var c=CARDS[id];if(!c)return;
   currentCardId=id;
   document.getElementById('dp-domain').textContent=c.domain;
   document.getElementById('dp-title').textContent=c.title;
   document.getElementById('dp-meta').innerHTML='<span class="avg '+c.avg+'">'+c.avgLabel+'</span><button class="export-btn" onclick="openExport(\''+id+'\')">&#128196; Export .md</button>';
-  var done=0;
-  for(var i=0;i<c.checks.length;i++){if(c.checks[i].done)done++;}
+  var done=0;for(var i=0;i<c.checks.length;i++){if(c.checks[i].done)done++;}
   var pct=c.checks.length?Math.round(done/c.checks.length*100):0;
   var html='';
   if(c.tags.length){html+='<div><div class="dp-sec">Labels</div><div>';for(var i=0;i<c.tags.length;i++){html+='<span class="pill '+c.tags[i].cls+'">'+c.tags[i].label+'</span>';}html+='</div></div>';}
@@ -596,7 +504,7 @@ function openCard(id){
   html+='<div><div class="dp-sec">Conceptueel kladblok</div><div class="kladblok">'+c.kladblok+'</div></div>';
   html+='<div><div class="dp-sec">Besluitvormings-log (continuïteit)</div><div class="besluitlog">'+(c.log||'Nog geen besluiten vastgelegd.')+'</div></div>';
   if(c.checks.length){
-    html+='<div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><div class="dp-sec" style="margin:0;">Standaard procedure</div><span style="font-size:10px;color:#64748b;">'+done+' / '+c.checks.length+' gereed</span></div>';
+    html+='<div><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><div class="dp-sec" style="margin:0;">Standaard procedure</div><span style="font-size:11px;color:#64748b;">'+done+' / '+c.checks.length+' gereed</span></div>';
     html+='<div class="prog-bar"><div class="prog-fill" style="width:'+pct+'%"></div></div>';
     for(var i=0;i<c.checks.length;i++){var x=c.checks[i];html+='<div class="chk-row"><div class="chk-box'+(x.done?' done':'')+'">'+( x.done?'&#10003;':'')+'</div><span class="'+(x.done?'chk-done':'')+'">'+x.t+'</span></div>';}
     html+='</div>';
@@ -606,7 +514,6 @@ function openCard(id){
   document.getElementById('drawer').className='drawer open';
 }
 function closeDrawer(){document.getElementById('drawer').className='drawer';currentCardId=null;}
-
 function buildMd(id){
   var c=CARDS[id];if(!c)return{md:'',fn:'export.md'};
   var date=new Date().toISOString().slice(0,10);
@@ -627,10 +534,8 @@ function renderMdHtml(md){
   var lines=md.split('\n'),html='';
   for(var i=0;i<lines.length;i++){
     var l=lines[i],cls='';
-    if(l.match(/^# /))cls='mh1';
-    else if(l.match(/^## /))cls='mh2';
-    else if(l.startsWith('- [x]'))cls='mck';
-    else if(l.startsWith('- [ ]'))cls='mco';
+    if(l.match(/^# /))cls='mh1';else if(l.match(/^## /))cls='mh2';
+    else if(l.startsWith('- [x]'))cls='mck';else if(l.startsWith('- [ ]'))cls='mco';
     else if(l.startsWith('tags:'))cls='mtg';
     else if(l.indexOf('file:///')>=0||l.indexOf('http')>=0)cls='mlk';
     html+='<span class="'+cls+'">'+(l.replace(/</g,'&lt;').replace(/>/g,'&gt;')||'&#8203;')+'</span>\n';
@@ -638,50 +543,34 @@ function renderMdHtml(md){
   return html;
 }
 function openExport(id){
-  var r=buildMd(id);
-  currentMd=r.md;currentFn=r.fn;
+  var r=buildMd(id);currentMd=r.md;currentFn=r.fn;
   document.getElementById('md-preview').innerHTML=renderMdHtml(currentMd);
   document.getElementById('export-fn').textContent='P:\\FinAdv\\PKM\\'+currentFn;
   openOverlay('overlay-export');
 }
-
 function openOverlay(id){document.getElementById(id).className='overlay open';}
 function closeOverlay(id){document.getElementById(id).className='overlay';}
 function openRitual(){openOverlay('overlay-ritual');}
-
 function showTab(name){
   var tabs=['focus','matrix','pitch'];
   for(var i=0;i<tabs.length;i++){
-    var p=document.getElementById('panel-'+tabs[i]);
-    var b=document.getElementById('btn-'+tabs[i]);
+    var p=document.getElementById('panel-'+tabs[i]),b=document.getElementById('btn-'+tabs[i]);
     if(p)p.className='panel'+(tabs[i]===name?' active':'');
     if(b)b.className='nb'+(tabs[i]===name?' active':'');
   }
-  closeDrawer();
-  closeOverlay('overlay-ritual');
-  closeOverlay('overlay-export');
+  closeDrawer();closeOverlay('overlay-ritual');closeOverlay('overlay-export');
 }
-
 document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('rx-btn').addEventListener('click',function(){closeOverlay('overlay-ritual');});
   document.getElementById('rc-btn').addEventListener('click',function(){closeOverlay('overlay-ritual');});
   document.getElementById('rg-btn').addEventListener('click',function(){closeOverlay('overlay-ritual');showTab('focus');});
   document.getElementById('ex-btn').addEventListener('click',function(){closeOverlay('overlay-export');});
   document.getElementById('copy-btn').addEventListener('click',function(){
-    if(navigator.clipboard){
-      navigator.clipboard.writeText(currentMd).then(function(){
-        var b=document.getElementById('copy-btn');
-        b.textContent='&#10003; Gekopieerd!';
-        setTimeout(function(){b.textContent='&#128203; Kopieer';},2000);
-      });
-    }
+    if(navigator.clipboard){navigator.clipboard.writeText(currentMd).then(function(){var b=document.getElementById('copy-btn');b.textContent='&#10003; Gekopieerd!';setTimeout(function(){b.textContent='&#128203; Kopieer';},2000);});}
   });
   document.getElementById('dl-btn').addEventListener('click',function(){
-    var blob=new Blob([currentMd],{type:'text/markdown'});
-    var a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download=currentFn;
-    a.click();
+    var blob=new Blob([currentMd],{type:'text/markdown'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);a.download=currentFn;a.click();
   });
   renderMatrix();
 });
