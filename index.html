@@ -377,8 +377,14 @@ var DOMAINS=[
     {bh:'Jeugd & Gezin',cells:{f:'jeugd'}},
     {bh:'Wmo & Zorg',cells:{g:'welzijn'}},
     {bh:'Participatiewet',cells:{}},
-    {bh:'Onderwijs',cells:{}},
-    {bh:'SRCE — Efred Bos',cells:{},icon:'🎭',sub:'Sport, Recreatie, Cultuur & Educatie\nRianne de Vries · Marko van der Schoot · Casper Christiaanse · Gea Veltman'}
+    {bh:'Onderwijs',cells:{}}
+  ]},
+  {name:'SRCE — Sport, Recreatie, Cultuur & Educatie',rows:[
+    {bh:'Efred Bos',cells:{},icon:'🎭',sub:'Teamleider SRCE\nEindverantwoordelijk voor Rianne · Marko · Casper · Gea'},
+    {bh:'Rianne de Vries',cells:{},icon:'🎨',sub:'Kunst, Muziek, Cultuurbeleid & Cultuureducatie'},
+    {bh:'Marko van der Schoot',cells:{},icon:'🌳',sub:'Recreatie'},
+    {bh:'Casper Christiaanse',cells:{},icon:'⚽',sub:'Buitensport'},
+    {bh:'Gea Veltman',cells:{},icon:'🏊',sub:'Binnensport & coördinator Sportcomplex Het Baken'}
   ]},
   {name:'Bedrijfsvoering',rows:[
     {bh:'HRM & Organisatie',cells:{w:'formatie'}},
@@ -431,7 +437,7 @@ var CARDS={
 function renderMatrix(){
   var tbody=document.getElementById('matrix-body');if(!tbody)return;
   /* domein-kleur voor linkerbalk */
-  var domColors=['#6366f1','#f59e0b','#10b981','#06b6d4','#84cc16'];
+  var domColors=['#6366f1','#f97316','#f59e0b','#10b981','#06b6d4','#84cc16'];
   var html='';
   for(var d=0;d<DOMAINS.length;d++){
     var dom=DOMAINS[d];
